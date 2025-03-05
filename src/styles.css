@@ -1,0 +1,10 @@
+:root {
+  --background-color: #fff; /* Fond général du site */
+  --background-btn-color: #0866ff; /* ACTIA: #BDD248 FB:0866ff */
+  --btn-text-color: #fff;
+  --btn-border: none;
+  --fw-bold: bold;
+  --btn-padding: 10px;
+  --font-family: "Helvetica", sans-serif;
+  --btn-radius: 6px; /* FB: 6px ACTIA: 20px */
+}

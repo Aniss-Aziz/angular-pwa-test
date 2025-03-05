@@ -1,0 +1,25 @@
+:root { 
+    --background-btn-color: #bdd248; /* ACTIA: #BDD248 FB:0866ff */
+    --btn-text-color: #fff;
+    --btn-border: none;
+    --btn-padding: 10px;
+    --font-family: "Helvetica", sans-serif;
+    --btn-radius: 6px; /* FB: 6px ACTIA: 20px */
+}
+
+
+.actia-ui-button{
+
+    background-color: var(--background-btn-color);
+
+    border: var(--btn-border);
+
+    color: var(--btn-text-color);
+
+    padding: var(--btn-padding);
+
+    font-family: var(--font-family);
+
+    border-radius: var(--btn-radius);
+
+}
