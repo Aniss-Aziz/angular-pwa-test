@@ -19,13 +19,12 @@ export class AppComponent implements OnInit {
   notificationPayload: any = null;
   registrationToken: string | null = null;
 
-
   pushService = inject(PushNotificationService);
 
   ngOnInit(): void {
     this.initNotificationPermission();
     this.loadRegistrationToken();
-    // this.initMessageListener();
+    this.initMessageListener();
   }
 
   async sendNotification() {
@@ -48,7 +47,7 @@ export class AppComponent implements OnInit {
   initNotificationPermission() {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register('/firebase-messaging-sw.js', { scope: '/' }) // Make sure the scope is correct
+        .register('/firebase-messaging-sw.js', { scope: '/' })
         .then((registration) => {
           console.log(
             'Service Worker registered with scope',
@@ -83,7 +82,7 @@ export class AppComponent implements OnInit {
         const notify = new Notification('First Notification', {
           body: 'Test Notification',
           tag: '1',
-          icon: 'assets/logo-multidiag.png', // Assurez-vous que le chemin de l'icône est correct
+          icon: '/logo-multidiag.png', // Assurez-vous que le chemin de l'icône est correct
         });
       } else {
         console.log('Permission refusée');
@@ -95,13 +94,26 @@ export class AppComponent implements OnInit {
     this.registrationToken = localStorage.getItem('fcm_token');
   }
 
-  // initMessageListener() {
-  //   const firebaseMessaging = getMessaging();
-  //   onMessage(firebaseMessaging, (messagePayload) => {
-  //     console.log('New message received:', messagePayload);
-  //     this.notificationPayload = messagePayload;
-  //   });
-  // }
+  initMessageListener() {
+    const firebaseMessaging = getMessaging();
+    onMessage(firebaseMessaging, (messagePayload) => {
+      console.log('New message received:', messagePayload);
+      this.notificationPayload = messagePayload;
+
+      if (messagePayload.notification) {
+        const { title, body } = messagePayload.notification;
+        new Notification(title ?? 'No title', {
+          body: body ?? 'No body',
+          icon: '/logo-multidiag.png', // Assurez-vous que le chemin de l'icône est correct
+        });
+      } else {
+        console.warn(
+          'Received message without notification payload:',
+          messagePayload
+        );
+      }
+    });
+  }
 
   // requestNotificationPermission() {
   //   if ('Notification' in window) {

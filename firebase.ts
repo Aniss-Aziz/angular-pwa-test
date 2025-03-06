@@ -52,6 +52,7 @@ const firebaseCloudMessaging = {
       }
     }
   },
+  
   getMessage: async function () {
     if (firebase.getApps().length > 0) {
       try {

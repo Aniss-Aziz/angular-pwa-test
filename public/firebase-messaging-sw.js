@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js");
 importScripts(
-  "https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js",
+  "https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"
 );
 
 const firebaseConfig = {
@@ -25,6 +25,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
+    icon: "/logo-multidiag.png",
     tag: payload.data.url || "default-tag",
   };
 

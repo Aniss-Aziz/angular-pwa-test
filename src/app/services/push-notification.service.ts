@@ -19,9 +19,8 @@ export class PushNotificationService {
     const response = await this.tokenService.getAccessToken();
 
     if (!response || !response.accessToken) {
-      throw new Error('Failded to retrieve access token');
+      throw new Error('Failed to retrieve access token');
     }
-
     const accessToken = response.accessToken;
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
