@@ -17,11 +17,14 @@ import { CommonModule } from '@angular/common';
 export class AppComponent implements OnInit {
   title = 'angular-pwa';
   notificationPayload: any = null;
+  registrationToken: string | null = null;
+
 
   pushService = inject(PushNotificationService);
 
   ngOnInit(): void {
     this.initNotificationPermission();
+    this.loadRegistrationToken();
     // this.initMessageListener();
   }
 
@@ -86,6 +89,10 @@ export class AppComponent implements OnInit {
         console.log('Permission refusée');
       }
     });
+  }
+
+  loadRegistrationToken() {
+    this.registrationToken = localStorage.getItem('fcm_token');
   }
 
   // initMessageListener() {

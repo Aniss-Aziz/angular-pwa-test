@@ -17,5 +17,6 @@
     </div>
     <button (click)="sendNotification()">Send Push Notification</button>
     <button (click)="allowNotification()">Autoriser les notifications</button>
+    <p *ngIf="registrationToken">Registration Token: {{ registrationToken }}</p>
   </div>
 </div>
