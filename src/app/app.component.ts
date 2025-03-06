@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
         .then((registration) => {
           console.log(
             'Service Worker registered with scope',
-            registration.scope,
+            registration.scope
           );
         })
         .catch((error) => {
@@ -68,8 +68,22 @@ export class AppComponent implements OnInit {
         console.log(fcmToken);
       } else {
         console.log(
-          'No token available. Please grant permission to generate one',
+          'No token available. Please grant permission to generate one'
         );
+      }
+    });
+  }
+
+  allowNotification() {
+    Notification.requestPermission().then((perm) => {
+      if (perm === 'granted') {
+        const notify = new Notification('First Notification', {
+          body: 'Test Notification',
+          tag: '1',
+          icon: 'assets/logo-multidiag.png', // Assurez-vous que le chemin de l'icône est correct
+        });
+      } else {
+        console.log('Permission refusée');
       }
     });
   }
