@@ -102,9 +102,11 @@ export class AppComponent implements OnInit {
 
       if (messagePayload.notification) {
         const { title, body } = messagePayload.notification;
-        new Notification(title ?? 'No title', {
-          body: body ?? 'No body',
-          icon: '/logo-multidiag.png', // Assurez-vous que le chemin de l'icône est correct
+        navigator.serviceWorker.ready.then((registration) => {
+          registration.showNotification(title ?? 'No title', {
+            body: body ?? 'No body',
+            icon: '/logo-multidiag.png', // Assurez-vous que le chemin de l'icône est correct
+          });
         });
       } else {
         console.warn(
