@@ -33,6 +33,7 @@ messaging.onBackgroundMessage((payload) => {
 });
 
 self.addEventListener("message", (event) => {
+  console.log("Message event received:", event);
   const { type, data } = event.data;
   if (type === "showNotification") {
     const { title, body } = data;
