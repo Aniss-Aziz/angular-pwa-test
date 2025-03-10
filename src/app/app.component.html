@@ -7,6 +7,9 @@
     <button class="btn btn-primary mb-3" (click)="allowNotification()">
       Autoriser les notifications
     </button>
+    <button class="btn btn-success mb-3" (click)="requestBluetoothDevice()">
+      Connect to Bluetooth Device
+    </button>
     <p class="alert alert-primary" *ngIf="registrationToken">
       <strong>Registration Token:</strong><br />
       {{ registrationToken }}

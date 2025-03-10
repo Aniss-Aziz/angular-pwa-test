@@ -116,6 +116,18 @@ export class AppComponent implements OnInit {
       }
     });
   }
+  async requestBluetoothDevice() {
+    try {
+      console.log('Requesting Bluetooth Device...');
+      const device = await navigator.bluetooth.requestDevice({
+        optionalServices: ["battery_service", "device_information"],
+        acceptAllDevices: true,
+      });
+      console.log('Device selected:', device);
+    } catch (error) {
+      console.error('Error requesting Bluetooth device:', error);
+    }
+  }
 
   // requestNotificationPermission() {
   //   if ('Notification' in window) {
