@@ -1,15 +1,22 @@
 <div class="container">
   <div class="row d-flex justify-content-center align-items-center">
     <h2 class="title text-center mt-3 mb-5">POC PWA</h2>
-    <button (click)="sendNotification()">Send Push Notification</button>
-    <button (click)="allowNotification()">Autoriser les notifications</button>
-    <p *ngIf="registrationToken">Registration Token: {{ registrationToken }}</p>
-    <div *ngIf="notificationPayload">
+    <button class="btn btn-primary mb-3" (click)="sendNotification()">
+      Send Push Notification
+    </button>
+    <button class="btn btn-primary mb-3" (click)="allowNotification()">
+      Autoriser les notifications
+    </button>
+    <p class="alert alert-primary" *ngIf="registrationToken">
+      <strong>Registration Token:</strong><br />
+      {{ registrationToken }}
+    </p>
+    <div class="alert alert-primary" *ngIf="notificationPayload" role="alert">
       <h3>{{ notificationPayload.notification.title }}</h3>
       <h4>{{ notificationPayload.notification.body }}</h4>
     </div>
-    <div *ngIf="!notificationPayload">
-      <h3>Aucune Message Arrivée</h3>
+    <div class="alert alert-success" *ngIf="!notificationPayload">
+      <h3 class="title">Aucune Message Arrivée</h3>
     </div>
   </div>
 </div>
