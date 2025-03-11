@@ -11,7 +11,7 @@ export class TokenService {
 
   getAccessToken() {
     return this.http.post<{ accessToken: string }>(
-      'http://localhost:3000/getAccessToken',
+      'https://backend-fcm.onrender.com/getAccessToken',
       {}
     ).toPromise();
   }
