@@ -29,4 +29,19 @@ interface BluetoothRemoteGATTServer {
   connected: boolean;
   connect(): Promise<BluetoothRemoteGATTServer>;
   disconnect(): void;
+  getPrimaryService(
+    service: BluetoothServiceUUID
+  ): Promise<BluetoothRemoteGATTService>;
+}
+
+interface BluetoothRemoteGATTService {
+  getCharacteristic(
+    characteristic: BluetoothCharacteristicUUID
+  ): Promise<BluetoothRemoteGATTCharacteristic>;
+}
+
+type BluetoothCharacteristicUUID = number | string;
+
+interface BluetoothRemoteGATTCharacteristic {
+  readValue(): Promise<DataView>;
 }

@@ -116,49 +116,40 @@ export class AppComponent implements OnInit {
       }
     });
   }
+
   async requestBluetoothDevice() {
     console.log('Requesting Bluetooth Device...');
 
     if (!navigator.bluetooth) {
       console.error('Bluetooth API is not available in this browser.');
-      alert('Bluetooth API is not available in this browser. Please use a compatible browser.');
+      alert(
+        'Bluetooth API is not available in this browser. Please use a compatible browser.'
+      );
       return;
     }
 
-    
-    const device = await navigator.bluetooth
-      .requestDevice({
-        optionalServices: ['device_information'],
+    try {
+      const device = await navigator.bluetooth.requestDevice({
+        optionalServices: ['battery_service'],
         acceptAllDevices: true,
-      })
-      .then((device) => {
-        console.log('Name:' + device.name);
-      })
-      .catch((error) => {
-        console.error('Argh! ' + error);
       });
+
+      console.log('Name:', device.name);
+
+      if (!device.gatt) {
+        console.error('GATT server not available on this device.');
+        return;
+      }
+
+      const server = await device.gatt.connect();
+      console.log('Connected to GATT server:', server);
+
+      const service = await server.getPrimaryService('battery_service');
+      const characteristic = await service.getCharacteristic('battery_level');
+      const value = await characteristic.readValue();
+      console.log(`Battery percentage is ${value.getUint8(0)}%`);
+    } catch (error) {
+      console.error('Argh! ', error);
+    }
   }
-
-  // requestNotificationPermission() {
-  //   if ('Notification' in window) {
-  //     Notification.requestPermission().then((permission) => {
-  //       if (permission === 'granted') {
-  //         this.showNotification();
-  //       } else {
-  //         console.log('Permission refusée');
-  //       }
-  //     });
-  //   } else {
-  //     console.log(
-  //       'Les notifications ne sont pas prises en charge par ce navigateur.',
-  //     );
-  //   }
-  // }
-
-  // showNotification() {
-  //   new Notification('First Notification', {
-  //     body: 'Test Notification',
-  //     icon: '/logo-multidiag.png',
-  //   });
-  // }
 }
