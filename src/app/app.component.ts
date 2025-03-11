@@ -118,6 +118,14 @@ export class AppComponent implements OnInit {
   }
   async requestBluetoothDevice() {
     console.log('Requesting Bluetooth Device...');
+
+    if (!navigator.bluetooth) {
+      console.error('Bluetooth API is not available in this browser.');
+      alert('Bluetooth API is not available in this browser. Please use a compatible browser.');
+      return;
+    }
+
+    
     const device = await navigator.bluetooth
       .requestDevice({
         optionalServices: ['device_information'],
