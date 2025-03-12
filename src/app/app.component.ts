@@ -227,20 +227,35 @@ export class AppComponent implements OnInit {
 
   async requestWebCam() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
       const video = document.querySelector(
-        'video#webcam'
+        'video#webcam',
       ) as HTMLVideoElement | null;
       if (video) {
         video.srcObject = stream;
         this.webcamStream = stream;
         this.isWebCamActive = true;
+        video.classList.add('active');
       }
 
-      navigator.mediaSession.setActionHandler('play', () => {
-        console.log('Entering Picture-in-Picture mode');
-        video?.requestPictureInPicture();
-      });
+      // Ajouter un bouton pour entrer en mode Picture-in-Picture
+      const pipButton = document.createElement('button');
+      pipButton.textContent = 'Enter Picture-in-Picture';
+      pipButton.classList.add('btn', 'btn-warning', 'mb-3');
+      pipButton.onclick = () => {
+        if (video) {
+          video.requestPictureInPicture();
+        }
+      };
+
+      // Ajouter le bouton au DOM
+      const container = document.querySelector('.video-container');
+      if (container) {
+        container.appendChild(pipButton);
+      }
     } catch (error) {
       console.error('Error accessing the webcam: ', error);
     }
@@ -251,13 +266,20 @@ export class AppComponent implements OnInit {
       const tracks = this.webcamStream.getTracks();
       tracks.forEach((track) => track.stop());
       const video = document.querySelector(
-        'video#webcam'
+        'video#webcam',
       ) as HTMLVideoElement | null;
       if (video) {
         video.srcObject = null;
+        video.classList.remove('active');
       }
       this.webcamStream = null;
       this.isWebCamActive = false;
+
+      // Retirer le bouton Picture-in-Picture
+      const pipButton = document.querySelector('.btn-warning');
+      if (pipButton) {
+        pipButton.remove();
+      }
     }
   }
 }
