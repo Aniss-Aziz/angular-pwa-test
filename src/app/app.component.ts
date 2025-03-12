@@ -5,6 +5,7 @@ import { environment } from '../environment';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { PushNotificationService } from './services/push-notification.service';
 import { CommonModule } from '@angular/common';
+
 /**
  *
  */
@@ -18,6 +19,9 @@ export class AppComponent implements OnInit {
   title = 'angular-pwa';
   notificationPayload: any = null;
   registrationToken: string | null = null;
+  props = ['name', 'email', 'tel', 'address', 'icon'];
+  opts = { multiple: true };
+  supported = 'contacts' in navigator;
 
   pushService = inject(PushNotificationService);
 
@@ -150,6 +154,20 @@ export class AppComponent implements OnInit {
       console.log(`Battery percentage is ${value.getUint8(0)}%`);
     } catch (error) {
       console.error('Argh! ', error);
+    }
+  }
+
+  async requestContact() {
+    if (this.supported) {
+      try {
+        const contacts = await navigator.contacts.select(this.props, this.opts);
+        console.log('Contacts:', contacts);
+      } catch (error) {
+        console.error('Error accessing contacts:', error);
+      }
+    } else {
+      console.error('Contacts API not supported in this browser.');
+      alert('Contacts API not supported in this browser.');
     }
   }
 }

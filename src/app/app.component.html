@@ -5,10 +5,13 @@
       Send Push Notification
     </button>
     <button class="btn btn-primary mb-3" (click)="allowNotification()">
-      Autoriser les notifications
+      Autorize notification
     </button>
     <button class="btn btn-success mb-3" (click)="requestBluetoothDevice()">
       Connect to Bluetooth Device
+    </button>
+    <button class="btn btn-success mb-3" (click)="requestContact()">
+      Contact
     </button>
     <p class="alert alert-primary" *ngIf="registrationToken">
       <strong>Registration Token:</strong><br />

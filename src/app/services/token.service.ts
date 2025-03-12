@@ -5,15 +5,16 @@ import { inject, Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class TokenService {
-
   constructor() {}
   http = inject(HttpClient);
 
   getAccessToken() {
-    return this.http.post<{ accessToken: string }>(
-      'https://backend-fcm.onrender.com/getAccessToken',
-      {}
-    ).toPromise();
+    return this.http
+      .post<{ accessToken: string }>(
+        'https://backend-fcm.onrender.com/getAccessToken',
+        {}
+      )
+      .toPromise();
   }
 }
 

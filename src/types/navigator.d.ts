@@ -2,6 +2,9 @@ interface Navigator {
   bluetooth: {
     requestDevice(options: RequestDeviceOptions): Promise<BluetoothDevice>;
   };
+  contacts:{
+    select(properties: string[], options: {multiple: boolean}): Promise<any[]>
+  }
 }
 
 interface RequestDeviceOptions {
