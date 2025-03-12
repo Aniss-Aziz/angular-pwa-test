@@ -13,6 +13,12 @@
     <button class="btn btn-success mb-3" (click)="requestContact()">
       Contact
     </button>
+    <button class="btn btn-danger mb-3" (click)="requestLocation()">
+      Find Me
+    </button>
+    <p id="status"></p>
+    <a id="map-link" class="mb-3" target="_blank"></a>
+
     <p class="alert alert-primary" *ngIf="registrationToken">
       <strong>Registration Token:</strong><br />
       {{ registrationToken }}

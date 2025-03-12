@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   registrationToken: string | null = null;
   props = ['name', 'email', 'tel', 'address', 'icon'];
   opts = { multiple: true };
-  supported = 'contacts' in navigator;
+  supported = 'contacts' in navigator && 'ContactsManager' in window;
 
   pushService = inject(PushNotificationService);
 
@@ -168,6 +168,48 @@ export class AppComponent implements OnInit {
     } else {
       console.error('Contacts API not supported in this browser.');
       alert('Contacts API not supported in this browser.');
+    }
+  }
+
+  requestLocation(): void {
+    const status: HTMLElement | null = document.querySelector('#status');
+    const mapLink: HTMLAnchorElement | null =
+      document.querySelector('#map-link');
+
+    if (mapLink) {
+      mapLink.href = '';
+      mapLink.textContent = '';
+    }
+
+    function success(position: GeolocationPosition): void {
+      const latitude: number = position.coords.latitude;
+      const longitude: number = position.coords.longitude;
+
+      if (status) {
+        status.textContent = '';
+      }
+
+      if (mapLink) {
+        mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+        mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+      }
+    }
+
+    function error(): void {
+      if (status) {
+        status.textContent = 'Unable to retrieve your location';
+      }
+    }
+
+    if (!navigator.geolocation) {
+      if (status) {
+        status.textContent = 'Geolocation is not supported by your browser';
+      }
+    } else {
+      if (status) {
+        status.textContent = 'Locating…';
+      }
+      navigator.geolocation.getCurrentPosition(success, error);
     }
   }
 }
