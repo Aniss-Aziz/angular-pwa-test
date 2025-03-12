@@ -5,7 +5,7 @@ interface Navigator {
   contacts: {
     select(
       properties: string[],
-      options: { multiple: boolean }
+      options: { multiple: boolean },
     ): Promise<any[]>;
   };
   connection: any;
@@ -37,13 +37,13 @@ interface BluetoothRemoteGATTServer {
   connect(): Promise<BluetoothRemoteGATTServer>;
   disconnect(): void;
   getPrimaryService(
-    service: BluetoothServiceUUID
+    service: BluetoothServiceUUID,
   ): Promise<BluetoothRemoteGATTService>;
 }
 
 interface BluetoothRemoteGATTService {
   getCharacteristic(
-    characteristic: BluetoothCharacteristicUUID
+    characteristic: BluetoothCharacteristicUUID,
   ): Promise<BluetoothRemoteGATTCharacteristic>;
 }
 

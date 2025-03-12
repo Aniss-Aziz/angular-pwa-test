@@ -19,12 +19,15 @@ export class AppComponent implements OnInit {
   title = 'angular-pwa';
   notificationPayload: any = null;
   registrationToken: string | null = null;
-  date = Date.now();
+
   isWebCamActive: boolean = false;
-  webcamStream: MediaStream | null = null;
+  date = Date.now();
   props = ['name', 'email', 'tel', 'address', 'icon'];
   opts = { multiple: true };
   supported = 'contacts' in navigator && 'ContactsManager' in window;
+  webcamStream: MediaStream | null = null;
+  isOnline: boolean = navigator.onLine;
+  connectionType: string = navigator.connection.effectiveType;
 
   pushService = inject(PushNotificationService);
 
@@ -32,6 +35,8 @@ export class AppComponent implements OnInit {
     this.initNotificationPermission();
     this.loadRegistrationToken();
     this.initMessageListener();
+    this.updateConnectionStatus();
+    this.addNetworkListeners();
   }
 
   async sendNotification() {
@@ -67,7 +72,7 @@ export class AppComponent implements OnInit {
         .then((registration) => {
           console.log(
             'Service Worker registered with scope',
-            registration.scope
+            registration.scope,
           );
         })
         .catch((error) => {
@@ -86,7 +91,7 @@ export class AppComponent implements OnInit {
         console.log(fcmToken);
       } else {
         console.log(
-          'No token available. Please grant permission to generate one'
+          'No token available. Please grant permission to generate one',
         );
       }
     });
@@ -127,7 +132,7 @@ export class AppComponent implements OnInit {
       } else {
         console.warn(
           'Received message without notification payload:',
-          messagePayload
+          messagePayload,
         );
       }
     });
@@ -139,7 +144,7 @@ export class AppComponent implements OnInit {
     if (!navigator.bluetooth) {
       console.error('Bluetooth API is not available in this browser.');
       alert(
-        'Bluetooth API is not available in this browser. Please use a compatible browser.'
+        'Bluetooth API is not available in this browser. Please use a compatible browser.',
       );
       return;
     }
@@ -281,5 +286,31 @@ export class AppComponent implements OnInit {
         pipButton.remove();
       }
     }
+  }
+
+  updateConnectionStatus() {
+    this.isOnline = navigator.onLine;
+    if (this.isOnline) {
+      console.log('Vous êtes en ligne');
+    } else {
+      console.log('Vous êtes hors ligne');
+    }
+  }
+
+  addNetworkListeners() {
+    window.addEventListener('online', this.updateConnectionStatus.bind(this));
+    window.addEventListener('offline', this.updateConnectionStatus.bind(this));
+    navigator.connection.addEventListener(
+      'change',
+      this.updateConnectionType.bind(this),
+    );
+  }
+
+  updateConnectionType() {
+    const newType = navigator.connection.effectiveType;
+    console.log(
+      `Connection type changed from ${this.connectionType} to ${newType}`,
+    );
+    this.connectionType = newType;
   }
 }
