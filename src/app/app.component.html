@@ -13,9 +13,23 @@
     <button class="btn btn-success mb-3" (click)="requestContact()">
       Contact
     </button>
+    <button class="btn btn-danger mb-3" (click)="requestWebCam()">
+      WebCam
+    </button>
     <button class="btn btn-danger mb-3" (click)="requestLocation()">
       Find Me
     </button>
+
+    <div class="video-container d-flex flex-column">
+      <video id="webcam" autoplay playsinline></video>
+      <button
+        *ngIf="isWebCamActive"
+        class="btn btn-danger mt-3 mb-3"
+        (click)="stopWebCam()"
+      >
+        Stop WebCam
+      </button>
+    </div>
     <p id="status"></p>
     <a id="map-link" class="mb-3" target="_blank"></a>
 
@@ -30,5 +44,7 @@
     <div class="alert alert-success" *ngIf="!notificationPayload">
       <h3 class="title">Aucune Message Arrivée</h3>
     </div>
+
+    <!-- Ajout de l'élément vidéo -->
   </div>
 </div>

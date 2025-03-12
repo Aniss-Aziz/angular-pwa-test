@@ -20,6 +20,8 @@ export class AppComponent implements OnInit {
   notificationPayload: any = null;
   registrationToken: string | null = null;
   date = Date.now();
+  isWebCamActive: boolean = false;
+  webcamStream: MediaStream | null = null;
   props = ['name', 'email', 'tel', 'address', 'icon'];
   opts = { multiple: true };
   supported = 'contacts' in navigator && 'ContactsManager' in window;
@@ -220,6 +222,42 @@ export class AppComponent implements OnInit {
         status.textContent = 'Locating…';
       }
       navigator.geolocation.getCurrentPosition(success, error);
+    }
+  }
+
+  async requestWebCam() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const video = document.querySelector(
+        'video#webcam'
+      ) as HTMLVideoElement | null;
+      if (video) {
+        video.srcObject = stream;
+        this.webcamStream = stream;
+        this.isWebCamActive = true;
+      }
+
+      navigator.mediaSession.setActionHandler('play', () => {
+        console.log('Entering Picture-in-Picture mode');
+        video?.requestPictureInPicture();
+      });
+    } catch (error) {
+      console.error('Error accessing the webcam: ', error);
+    }
+  }
+
+  stopWebCam() {
+    if (this.webcamStream) {
+      const tracks = this.webcamStream.getTracks();
+      tracks.forEach((track) => track.stop());
+      const video = document.querySelector(
+        'video#webcam'
+      ) as HTMLVideoElement | null;
+      if (video) {
+        video.srcObject = null;
+      }
+      this.webcamStream = null;
+      this.isWebCamActive = false;
     }
   }
 }
