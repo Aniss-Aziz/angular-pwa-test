@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   title = 'angular-pwa';
   notificationPayload: any = null;
   registrationToken: string | null = null;
+  date = Date.now();
   props = ['name', 'email', 'tel', 'address', 'icon'];
   opts = { multiple: true };
   supported = 'contacts' in navigator && 'ContactsManager' in window;
@@ -38,7 +39,16 @@ export class AppComponent implements OnInit {
       return;
     }
     const title = 'Hello';
-    const body = 'This is a test notification';
+    const body = `This is a test notification + ${new Date()
+      .toLocaleString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+      .replace(',', ' à')
+      .replace(':', 'h')}`;
 
     try {
       await this.pushService.sendPushNotification(token, title, body);
