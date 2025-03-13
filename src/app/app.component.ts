@@ -27,13 +27,20 @@ export class AppComponent implements OnInit {
   supported = 'contacts' in navigator && 'ContactsManager' in window;
   webcamStream: MediaStream | null = null;
   isOnline: boolean = navigator.onLine;
-  connectionType: string = navigator.connection.effectiveType;
+  connectionType: string = navigator.connection?.effectiveType || 'unknown';
   pushService = inject(PushNotificationService);
 
   ngOnInit(): void {
     this.initNotificationPermission();
     this.loadRegistrationToken();
     this.initMessageListener();
+
+    if ('connection' in navigator && 'effectiveType' in navigator.connection) {
+      this.updateConnectionStatus();
+      this.addNetworkListeners();
+    } else {
+      console.warn('Network Information API is not supported in this browser.');
+    }
   }
 
   async sendNotification() {
@@ -287,6 +294,7 @@ export class AppComponent implements OnInit {
 
   updateConnectionStatus() {
     this.isOnline = navigator.onLine;
+    console.log('updateConnectionStatus called, isOnline:', this.isOnline);
     if (this.isOnline) {
       console.log('Vous êtes en ligne');
     } else {
@@ -297,17 +305,24 @@ export class AppComponent implements OnInit {
   addNetworkListeners() {
     window.addEventListener('online', this.updateConnectionStatus.bind(this));
     window.addEventListener('offline', this.updateConnectionStatus.bind(this));
-    navigator.connection.addEventListener(
-      'change',
-      this.updateConnectionType.bind(this)
-    );
+
+    if ('connection' in navigator) {
+      navigator.connection.addEventListener(
+        'change',
+        this.updateConnectionType.bind(this)
+      );
+    }
   }
 
   updateConnectionType() {
-    const newType = navigator.connection.effectiveType;
-    console.log(
-      `Connection type changed from ${this.connectionType} to ${newType}`
-    );
-    this.connectionType = newType;
+    try {
+      const newType = navigator.connection.effectiveType;
+      console.log(
+        `Connection type changed from ${this.connectionType} to ${newType}`
+      );
+      this.connectionType = newType;
+    } catch (error) {
+      console.error('Error updating connection type:', error);
+    }
   }
 }
