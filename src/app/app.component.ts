@@ -26,7 +26,8 @@ export class AppComponent implements OnInit {
   opts = { multiple: true };
   supported = 'contacts' in navigator && 'ContactsManager' in window;
   webcamStream: MediaStream | null = null;
-
+  isOnline: boolean = navigator.onLine;
+  connectionType: string = navigator.connection.effectiveType;
   pushService = inject(PushNotificationService);
 
   ngOnInit(): void {
@@ -282,5 +283,31 @@ export class AppComponent implements OnInit {
         pipButton.remove();
       }
     }
+  }
+
+  updateConnectionStatus() {
+    this.isOnline = navigator.onLine;
+    if (this.isOnline) {
+      console.log('Vous êtes en ligne');
+    } else {
+      console.log('Vous êtes hors ligne');
+    }
+  }
+
+  addNetworkListeners() {
+    window.addEventListener('online', this.updateConnectionStatus.bind(this));
+    window.addEventListener('offline', this.updateConnectionStatus.bind(this));
+    navigator.connection.addEventListener(
+      'change',
+      this.updateConnectionType.bind(this)
+    );
+  }
+
+  updateConnectionType() {
+    const newType = navigator.connection.effectiveType;
+    console.log(
+      `Connection type changed from ${this.connectionType} to ${newType}`
+    );
+    this.connectionType = newType;
   }
 }
