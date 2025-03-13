@@ -4,40 +4,6 @@
       class="title d-flex justify-content-center align-items-center text-center mt-3 mb-5"
     >
       POC PWA
-      <img
-        style="margin-top: -8px; object-fit: cover"
-        *ngIf="connectionType === '4g'"
-        src="/4g.png"
-        alt="4G Image"
-        width="30px"
-        height="30px"
-        class="ms-2"
-      />
-      <img
-        style="margin-top: -8px; object-fit: cover"
-        *ngIf="connectionType === '3g'"
-        src="/3g.png"
-        alt="3G Image"
-        width="30px"
-        height="30px"
-        class="ms-2"
-      />
-      <img
-        style="margin-top: -8px; object-fit: cover"
-        *ngIf="connectionType === '2g'"
-        src="/2g.png"
-        alt="2G Image"
-        width="30px"
-        height="30px"
-        class="ms-2"
-      />
-      <img
-        style="margin-top: -8px; object-fit: cover"
-        *ngIf="connectionType === 'wifi'"
-        src="/wifi.png"
-        alt="WiFi Image"
-        class="ms-2"
-      />
     </h2>
 
     <button class="btn btn-primary mb-3" (click)="sendNotification()">
