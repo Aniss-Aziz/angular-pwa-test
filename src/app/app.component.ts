@@ -34,7 +34,6 @@ export class AppComponent implements OnInit {
     this.initNotificationPermission();
     this.loadRegistrationToken();
     this.initMessageListener();
-    this.allowNotification();
 
     if ('connection' in navigator && 'effectiveType' in navigator.connection) {
       this.updateConnectionStatus();
@@ -105,27 +104,16 @@ export class AppComponent implements OnInit {
   allowNotification() {
     Notification.requestPermission().then((perm) => {
       if (perm === 'granted') {
-        console.log('Notification permission granted.');
-        // Aucune notification n'est envoyée ici, seulement la permission est demandée.
+        const notify = new Notification('First Notification', {
+          body: 'Test Notification',
+          tag: '1',
+          icon: '/logo-multidiag.png',
+        });
       } else {
         console.log('Permission refusée');
       }
     });
   }
-
-  // allowNotification() {
-  //   Notification.requestPermission().then((perm) => {
-  //     if (perm === 'granted') {
-  //       const notify = new Notification('First Notification', {
-  //         body: 'Test Notification',
-  //         tag: '1',
-  //         icon: '/logo-multidiag.png',
-  //       });
-  //     } else {
-  //       console.log('Permission refusée');
-  //     }
-  //   });
-  // }
 
   loadRegistrationToken() {
     this.registrationToken = localStorage.getItem('fcm_token');
