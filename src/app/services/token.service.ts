@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,20 +17,19 @@ export class TokenService {
       )
       .toPromise();
   }
+
+  subscribeUserToTopic(token: any, topic: any): Observable<any> {
+    console.log(
+      'subscribeUserToTopic called with token:',
+      token,
+      'and topic:',
+      topic
+    );
+    const body = {
+      token,
+      topic,
+    };
+    return this.http.post('http://localhost:3000/subscribe-to-topic', body);
+  }
 }
 
-// export class TokenService {
-//   private keyFile = '/pwa-test-a706a-a5bc77c95ff1.json';
-//   constructor() {}
-//   http = inject(HttpClient);
-
-//   getAccessToken() {
-//     const token = localStorage.getItem('fcm_token');
-//     if (!token) {
-//       console.error('❌ Aucun token FCM trouvé dans localStorage.');
-//       return null;
-//     }
-
-//     return { accessToken: token };
-//   }
-// }

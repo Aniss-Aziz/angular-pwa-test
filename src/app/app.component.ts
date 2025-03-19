@@ -5,6 +5,7 @@ import { environment } from '../environment';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { PushNotificationService } from './services/push-notification.service';
 import { CommonModule } from '@angular/common';
+import { TokenService } from './services/token.service';
 
 /**
  *
@@ -29,11 +30,13 @@ export class AppComponent implements OnInit {
   isOnline: boolean = navigator.onLine;
   connectionType: string = navigator.connection?.effectiveType || 'unknown';
   pushService = inject(PushNotificationService);
+  tokenService = inject(TokenService);
 
   ngOnInit(): void {
     this.initNotificationPermission();
     this.loadRegistrationToken();
     this.initMessageListener();
+    this.subscribe();
 
     if ('connection' in navigator && 'effectiveType' in navigator.connection) {
       this.updateConnectionStatus();
@@ -89,7 +92,7 @@ export class AppComponent implements OnInit {
     }).then((registrationToken) => {
       if (registrationToken) {
         console.log('Success! Token obtained successfully');
-        console.log(registrationToken);
+
         localStorage.setItem('fcm_token', registrationToken);
         const fcmToken = localStorage.getItem('fcm_token');
         console.log(fcmToken);
@@ -113,6 +116,20 @@ export class AppComponent implements OnInit {
         console.log('Permission refusée');
       }
     });
+  }
+
+  subscribe() {
+    const fcmToken = localStorage.getItem('fcm_token');
+    if (fcmToken) {
+      console.log('Subscribing user with token:', fcmToken);
+      this.tokenService.subscribeUserToTopic(fcmToken, 'news').subscribe(
+        (response) =>
+          console.log('Subscribed to topic successfully:', response),
+        (error) => console.error('Subscription to topic failed:', error)
+      );
+    } else {
+      console.error('No FCM token found in localStorage');
+    }
   }
 
   loadRegistrationToken() {
