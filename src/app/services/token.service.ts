@@ -29,7 +29,9 @@ export class TokenService {
       token,
       topic,
     };
-    return this.http.post('http://localhost:3000/subscribe-to-topic', body);
+    return this.http.post(
+      'https://backend-fcm.onrender.com/subscribe-to-topic',
+      body
+    );
   }
 }
-
